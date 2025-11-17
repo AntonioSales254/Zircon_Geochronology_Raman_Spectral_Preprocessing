@@ -259,7 +259,7 @@ PhD Candidate, Materials Science\
 Federal University of São Carlos (UFSCar) -- Sorocaba\
 Advisor: Prof. Dr. Airton Natanael Coelho Dias
 
-📧 **antonio.sales@estudante.ufscar.br**
+📧 **diasanc@ufscar.br**
 
 ------------------------------------------------------------------------
 

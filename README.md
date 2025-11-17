@@ -196,7 +196,6 @@ Results are annotated in: - Peak datasets\
 
     project/
     │── batch_raman_backup_v7.0.py
-    │── raman_visualization.py
     │── raman_config.json
     │
     ├── csv_unificados/               # Input CSV spectra

@@ -154,7 +154,7 @@ For each combination the system generates:
 
 ------------------------------------------------------------------------
 
-# 📐 5. High‑Precision Metrics
+# 📐 5. Precision Metrics
 
 ### Precision Levels:
 

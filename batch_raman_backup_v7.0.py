@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+'#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 ================================================================================
@@ -14,79 +14,13 @@ PROGRAM: PhD in Materials Science
 VERSION 7.0 INFORMATION - ENHANCED REGIONAL SPECTRAL ANALYSIS
 ================================================================================
 
-CREATION DATE: December 2024
+CREATION DATE: December 2022
 CURRENT VERSION: 7.0 (Enhanced from v6.0)
 RELEASE DATE: November 6, 2025
 LANGUAGE: Python 3.x
 DEPENDENCIES: numpy, pandas, scipy, matplotlib, pathlib, json, datetime, logging
 
-MAIN OBJECTIVE FOR V7.0:
-🎯 REGIONAL SPECTRAL ANALYSIS ENHANCEMENT
-   - Detailed spectral region analysis in combinatorial reports
-   - High-precision metrics (6 decimal places for R², 4 for FWHM)
-   - Regional comparative analysis across all combinations
-   - Differential impact assessment of normalization methods
-   - Enhanced scientific reporting with regional insights
 
-COMBINATORIAL ANALYSIS FRAMEWORK:
-• Baseline Methods: AirPLS, Polynomial, Spline
-• Normalization Methods: min_max, area, peak, vector
-• Total Combinations: 12 systematic parameter combinations
-• Regional analysis for 7 spectral regions
-• Cross-validation approach for method selection
-• Statistical significance testing by region
-
-NEW FEATURES V7.0:
-🔬 REGIONAL ANALYSIS ENHANCEMENT:
-   - Per-region metrics in individual combination reports
-   - Regional CSV analysis files for each combination
-   - Consolidated regional comparative analysis
-   - Differential impact quantification (Δ metrics)
-   - Region-specific method ranking
-
-📊 ENHANCED PRECISION:
-   - 6 decimal places for R² metrics
-   - 4 decimal places for FWHM and CV
-   - High-precision center position tracking
-   - Quantification of subtle normalization effects
-
-📋 ADVANCED SCIENTIFIC REPORTING:
-   - Regional comparison reports with rankings
-   - Impact of normalization within same baseline
-   - ν₃(SiO₄) specific metrics (most radiation-sensitive)
-   - Publication-ready regional analysis tables
-   - Hypothesis validation with regional context
-
-🎯 OUTPUT STRUCTURE V7.0:
-   - Regional_Analysis_{combination}_{timestamp}.csv per combination
-   - Regional_Comparative_Analysis_{timestamp}.csv (consolidated)
-   - Regional_Comparison_Report_{timestamp}.txt (interpretative)
-   - Enhanced Scientific_Report with regional sections
-   - Nu3-specific columns in comparative summary
-
-DEVELOPMENT STATUS v7.0:
-✅ STABLE - Enhanced regional analysis implementation
-✅ VALIDATED - High-precision metrics tested
-✅ OPTIMIZED - Regional comparative framework operational
-✅ PUBLICATION-READY - Regional insights for scientific articles
-
-CHANGELOG v6.0 → v7.0:
-✨ NEW - Regional analysis by spectral region in reports
-✨ NEW - Regional_Analysis_{combination}.csv files
-✨ NEW - Regional_Comparative_Analysis.csv consolidated file
-✨ NEW - Regional_Comparison_Report.txt interpretative report
-✨ NEW - Nu3-specific metrics in comparative summary
-🔧 ENHANCED - Precision increased (R²: 6 decimals, FWHM: 4 decimals)
-🔧 ENHANCED - Individual reports include detailed regional sections
-🔧 ENHANCED - Δ metrics to quantify normalization impact
-📊 IMPROVED - Better revelation of subtle differences between methods
-📊 IMPROVED - Region-specific method optimization capability
-
-RESOLVED v7.0:
-✅ Identical metrics issue: precision increased reveals real differences
-✅ Regional blind spot: now analyzes impact per spectral region
-✅ Normalization impact: quantified via Δ metrics per baseline
-✅ Scientific insight: identifies region-specific optimal methods
 
 ================================================================================
 MAIN FUNCTIONALITIES
@@ -253,7 +187,7 @@ SPECTRAL REGIONS ANALYZED (7 total):
 • ExtRot 4: 350-365 cm⁻¹ - External rotation mode 4
 
 ================================================================================
-CONTEXTUALIZED ROBUSTNESS ANALYSIS (VALIDATED AND PRESERVED V3.0)
+CONTEXTUALIZED ANALYSIS (VALIDATED AND PRESERVED V3.0)
 ================================================================================
 
 🎯 MAIN FEATURES:
@@ -274,32 +208,7 @@ CONTEXTUALIZED ROBUSTNESS ANALYSIS (VALIDATED AND PRESERVED V3.0)
 • May indicate radiation damage
 • Special crystallization conditions
 • Instrumental effects
-• Sample-specific characteristics
 
-================================================================================
-VALIDATION AND QUALITY
-================================================================================
-
-✅ QUALITY CONTROL:
-• Automatic validation of input parameters
-• Data consistency verification
-• Detection of fitting problems (low R²)
-• Regional peak distribution analysis
-• Contextualized recommendations for improvement
-
-📊 ROBUSTNESS METRICS:
-• Percentage of peaks in expected regions
-• Quality of Gaussian fits (R²)
-• FWHM distribution by region
-• Comparison with typical literature values
-• Detection of systematic vs regional problems
-
-🔬 READY FOR:
-• Zircon sample analysis in scientific research
-• Publication of results in specialized journals
-• Use in PhD and academic research projects
-• Application in Raman spectroscopy laboratories
-• Validation through peer review
 
 ================================================================================
 CONTACT AND SUPPORT
@@ -310,8 +219,6 @@ Email: [antonio.sales@estudante.ufscar.br]
 Institution: UFSCar - Sorocaba
 Program: PhD in Materials Science
 Advisor: Prof. Dr. Airton Natanael Coelho Dias
-
-For technical support or scientific questions, please contact the developer.
 
 ================================================================================
 """

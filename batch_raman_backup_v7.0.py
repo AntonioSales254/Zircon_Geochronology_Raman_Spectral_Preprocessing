@@ -810,28 +810,7 @@ def normalize_spectrum(y, x=None, method="min_max"):
     ValueError
         If the specified method is not recognized or if the input data
         is not suitable for the selected method.
-    
-    Examples:
-    ---------
-    >>> import numpy as np
-    >>> y = np.array([100, 200, 300, 150, 50])
-    >>> 
-    >>> # Min-Max normalization
-    >>> y_minmax = normalize_spectrum(y, method="min_max")
-    >>> print(y_minmax)  # [0.2, 0.6, 1.0, 0.4, 0.0]
-    >>> 
-    >>> # Area normalization
-    >>> y_area = normalize_spectrum(y, method="area")
-    >>> print(np.sum(y_area))  # 1.0
-    >>> 
-    >>> # L2 normalization
-    >>> y_vector = normalize_spectrum(y, method="vector")
-    >>> print(np.linalg.norm(y_vector))  # 1.0
-
-    See Also:
-    ---------
-    normalize_min_max : Specific implementation of Min-Max normalization
-    scipy.preprocessing.normalize : General normalization from scikit-learn
+       
     """
     if method == "min_max":
         return normalize_min_max(y)
@@ -870,12 +849,7 @@ def get_normalization_suffix(method):
         
     Returns:
         str: File suffix for the method
-        
-    Examples:
-        >>> get_normalization_suffix("min_max")
-        '_minmax'
-        >>> get_normalization_suffix("area")
-        '_area'
+      
     """
     suffix_mapping = {
         "min_max": "_minmax",
@@ -934,9 +908,7 @@ def generate_output_filename_with_suffix(base_filename, method, file_type="csv")
     Returns:
         str: Complete filename with normalization suffix
         
-    Examples:
-        >>> generate_output_filename_with_suffix("sample_001_results", "min_max")
-        'sample_001_results_minmax.csv'
+    
     """
     suffix = get_normalization_suffix(method)
     return f"{base_filename}{suffix}.{file_type}"
@@ -1077,18 +1049,6 @@ def airpls_baseline(y, lambda_=10000, porder=1, itermax=10):
     - The method is particularly effective for spectra with strong fluorescence backgrounds.
     - For very noisy spectra, consider applying smoothing before baseline correction.
     
-    Examples:
-    ---------
-    >>> import numpy as np
-    >>> # Generate synthetic spectrum with baseline
-    >>> x = np.linspace(100, 3000, 1000)
-    >>> baseline = 1000 * np.exp(-x/1000) + 100
-    >>> peaks = 500 * np.exp(-((x-1000)/50)**2) + 300 * np.exp(-((x-1500)/30)**2)
-    >>> spectrum = baseline + peaks + 20 * np.random.randn(len(x))
-    >>> 
-    >>> # Apply airPLS baseline correction
-    >>> corrected_baseline = airpls_baseline(spectrum, lambda_=10000)
-    >>> corrected_spectrum = spectrum - corrected_baseline
     
     Raises:
     -------
@@ -1258,21 +1218,6 @@ def spline_baseline(y, x=None, smoothing_factor=0.1, interpolation_factor=5):
            A Unified Solution. Sensors, 24(10), 3161.
            https://doi.org/10.3390/s24103161
     
-    Examples
-    --------
-    >>> import numpy as np
-    >>> # Simulate Raman spectrum with complex baseline
-    >>> x = np.linspace(200, 2000, 1000)
-    >>> y_signal = np.exp(-0.5 * ((x - 1000) / 100)**2)  # Gaussian peak
-    >>> baseline_complex = 0.1*np.sin(x/100) + 0.05*x + 2  # Non-linear baseline
-    >>> y = y_signal + baseline_complex + 0.02*np.random.normal(size=len(x))
-    >>> corrected, baseline = spline_baseline(y, x, smoothing_factor=0.15)
-    >>> print(f"Complex baseline removed, maximum intensity: {np.max(corrected):.3f}")
-    
-    >>> # Fine-tuning parameters for different spectrum types
-    >>> # For spectra with high variation: smoothing_factor=0.05
-    >>> # For smoother spectra: smoothing_factor=0.2
-    >>> corrected_fine, _ = spline_baseline(y, smoothing_factor=0.05, interpolation_factor=3)
     
     Warnings
     --------
@@ -1280,10 +1225,7 @@ def spline_baseline(y, x=None, smoothing_factor=0.1, interpolation_factor=5):
     - Very low smoothing parameters may result in baseline overfitting
     - Very high interpolation factor may significantly increase processing time
     
-    See Also
-    --------
-    polynomial_baseline : Correction using polynomial fitting
-    airpls_baseline : Correction using Asymmetrically Reweighted Penalized Least Squares
+    
     """
     from scipy.interpolate import UnivariateSpline
     from scipy.signal import find_peaks
@@ -1436,38 +1378,6 @@ def correct_baseline(y, x=None, config=None):
            A Unified Solution. Sensors, 24(10), 3161.
            https://doi.org/10.3390/s24103161
     
-    Examples
-    --------
-    >>> import numpy as np
-    >>> # Configuration for airPLS method
-    >>> config_airpls = {
-    ...     "baseline_correction": {
-    ...         "method": "airpls",
-    ...         "airpls_lambda": 100000
-    ...     }
-    ... }
-    >>> x = np.linspace(200, 2000, 1000)
-    >>> y = np.exp(-0.5 * ((x - 1000) / 100)**2) + 0.1*x + 2
-    >>> corrected, baseline = correct_baseline(y, x, config_airpls)
-    >>> print(f"airPLS method applied, maximum intensity: {np.max(corrected):.3f}")
-    
-    >>> # Configuration for polynomial method
-    >>> config_poly = {
-    ...     "baseline_correction": {
-    ...         "method": "polynomial",
-    ...         "polynomial_degree": 4
-    ...     }
-    ... }
-    >>> corrected, baseline = correct_baseline(y, x, config_poly)
-    
-    >>> # Configuration for spline method
-    >>> config_spline = {
-    ...     "baseline_correction": {
-    ...         "method": "spline",
-    ...         "spline_smoothing": 0.1
-    ...     }
-    ... }
-    >>> corrected, baseline = correct_baseline(y, x, config_spline)
     
     Warnings
     --------
@@ -1475,11 +1385,7 @@ def correct_baseline(y, x=None, config=None):
     - Inadequate parameters may result in insufficient correction or overfitting
     - Configuration validation should be done before application to data batches
     
-    See Also
-    --------
-    airpls_baseline : Correction using Asymmetrically Reweighted Penalized Least Squares
-    polynomial_baseline : Correction using polynomial fitting
-    spline_baseline : Correction using cubic spline interpolation
+    
     """
     baseline_config = config["baseline_correction"]
     method = baseline_config["method"]
@@ -2169,69 +2075,6 @@ def fit_gaussian_profiles(x, y, peaks_indices, fwhm_left_ips, fwhm_right_ips, me
     - Memória: O(n) por pico processado
     - Paralelização: Cada pico é processado independentemente
     
-    Examples
-    --------
-    **Exemplo 1: Ajuste básico de picos detectados**
-    
-    >>> import numpy as np
-    >>> from scipy.signal import find_peaks
-    >>> 
-    >>> # Dados sintéticos de espectro Raman
-    >>> x = np.linspace(100, 300, 500)
-    >>> y = (2.0 * np.exp(-((x-150)**2)/(2*5**2)) + 
-    ...      1.5 * np.exp(-((x-200)**2)/(2*8**2)) + 
-    ...      0.1 * np.random.normal(size=len(x)))
-    >>> 
-    >>> # Detectar picos
-    >>> peaks, _ = find_peaks(y, height=0.5, distance=20)
-    >>> 
-    >>> # Calcular FWHM (simplificado para exemplo)
-    >>> fwhm_left = x[peaks] - 10   # Estimativa simplificada
-    >>> fwhm_right = x[peaks] + 10  # Estimativa simplificada
-    >>> 
-    >>> # Ajustar perfis Gaussianos
-    >>> results = fit_gaussian_profiles(x, y, peaks, fwhm_left, fwhm_right)
-    >>> 
-    >>> # Analisar resultados
-    >>> for i, result in enumerate(results):
-    ...     print(f"Pico {i+1}:")
-    ...     print(f"  Centro: {result['center']:.2f} cm⁻¹")
-    ...     print(f"  FWHM: {result['fwhm_gaussian']:.2f} cm⁻¹")
-    ...     print(f"  Área: {result['area_gaussian']:.2f}")
-    ...     print(f"  R²: {result['r_squared']:.4f}")
-    
-    **Exemplo 2: Análise de qualidade de ajuste**
-    
-    >>> # Filtrar apenas ajustes de alta qualidade
-    >>> good_fits = [r for r in results if r['r_squared'] > 0.95]
-    >>> print(f"Ajustes de alta qualidade: {len(good_fits)}/{len(results)}")
-    >>> 
-    >>> # Calcular estatísticas de largura espectral
-    >>> fwhm_values = [r['fwhm_gaussian'] for r in good_fits]
-    >>> mean_fwhm = np.mean(fwhm_values)
-    >>> std_fwhm = np.std(fwhm_values)
-    >>> print(f"FWHM médio: {mean_fwhm:.2f} ± {std_fwhm:.2f} cm⁻¹")
-    
-    **Exemplo 3: Comparação de métodos de otimização**
-    
-    >>> # Testar diferentes métodos
-    >>> methods = ['trf', 'lm', 'dogbox']
-    >>> for method in methods:
-    ...     try:
-    ...         results = fit_gaussian_profiles(x, y, peaks, fwhm_left, fwhm_right, 
-    ...                                        method=method)
-    ...         avg_r2 = np.mean([r['r_squared'] for r in results])
-    ...         print(f"Método {method}: R² médio = {avg_r2:.4f}")
-    ...     except Exception as e:
-    ...         print(f"Método {method}: Falhou - {e}")
-    
-    See Also
-    --------
-    single_gaussian : Função modelo Gaussiana utilizada no ajuste
-    calculate_gaussian_area : Cálculo analítico da área Gaussiana
-    scipy.optimize.curve_fit : Função de otimização não-linear subjacente
-    scipy.integrate.simpson : Integração numérica para validação de área
-    find_raman_peaks : Detecção de picos para uso com esta função
     
     References
     ----------
@@ -2466,96 +2309,6 @@ def calculate_gaussian_area(amplitude, sigma):
     - Não aplicável a perfis Lorentzianos, Voigt ou assimétricos
     - Assume linha de base já subtraída (offset = 0)
     
-    Examples
-    --------
-    **Exemplo 1: Cálculo básico de área**
-    
-    >>> amplitude = 1000.0  # contagens
-    >>> sigma = 5.0         # cm⁻¹
-    >>> area = calculate_gaussian_area(amplitude, sigma)
-    >>> print(f"Área: {area:.2f} contagens·cm⁻¹")
-    Área: 12533.14 contagens·cm⁻¹
-    
-    **Exemplo 2: Conversão FWHM → σ → Área**
-    
-    >>> fwhm = 12.0  # cm⁻¹
-    >>> sigma = fwhm / 2.355
-    >>> amplitude = 500.0
-    >>> area = calculate_gaussian_area(amplitude, sigma)
-    >>> print(f"FWHM: {fwhm:.1f} cm⁻¹")
-    >>> print(f"σ: {sigma:.2f} cm⁻¹") 
-    >>> print(f"Área: {area:.1f} contagens·cm⁻¹")
-    FWHM: 12.0 cm⁻¹
-    σ: 5.10 cm⁻¹
-    Área: 6377.9 contagens·cm⁻¹
-    
-    **Exemplo 3: Análise quantitativa de múltiplos picos**
-    
-    >>> # Dados de ajuste para múltiplos picos
-    >>> picos = [
-    ...     {'amplitude': 800, 'sigma': 4.2, 'centro': 1008},  # Pico principal zircão
-    ...     {'amplitude': 200, 'sigma': 6.1, 'centro': 1178},  # Pico secundário
-    ...     {'amplitude': 150, 'sigma': 3.8, 'centro': 1356}   # Pico menor
-    ... ]
-    >>> 
-    >>> areas = []
-    >>> for i, pico in enumerate(picos):
-    ...     area = calculate_gaussian_area(pico['amplitude'], pico['sigma'])
-    ...     areas.append(area)
-    ...     print(f"Pico {i+1} ({pico['centro']} cm⁻¹): {area:.0f} u.a.·cm⁻¹")
-    >>> 
-    >>> # Calcular proporções relativas
-    >>> area_total = sum(areas)
-    >>> for i, area in enumerate(areas):
-    ...     proporcao = (area / area_total) * 100
-    ...     print(f"Pico {i+1}: {proporcao:.1f}% da área total")
-    
-    **Exemplo 4: Validação com integração numérica**
-    
-    >>> import numpy as np
-    >>> from scipy.integrate import quad
-    >>> 
-    >>> def gaussian(x, A, mu, sigma):
-    ...     return A * np.exp(-((x - mu)**2) / (2 * sigma**2))
-    >>> 
-    >>> # Parâmetros do pico
-    >>> A, mu, sigma = 1000, 1008, 5.0
-    >>> 
-    >>> # Área analítica
-    >>> area_analitica = calculate_gaussian_area(A, sigma)
-    >>> 
-    >>> # Área numérica (integração)
-    >>> area_numerica, _ = quad(gaussian, mu-5*sigma, mu+5*sigma, args=(A, mu, sigma))
-    >>> 
-    >>> # Comparação
-    >>> erro_relativo = abs(area_analitica - area_numerica) / area_analitica * 100
-    >>> print(f"Área analítica: {area_analitica:.2f}")
-    >>> print(f"Área numérica:  {area_numerica:.2f}")
-    >>> print(f"Erro relativo:  {erro_relativo:.4f}%")
-    
-    **Exemplo 5: Análise de sensibilidade**
-    
-    >>> # Estudo da dependência da área com os parâmetros
-    >>> amplitude_base = 1000
-    >>> sigma_base = 5.0
-    >>> 
-    >>> # Variação da amplitude
-    >>> for fator in [0.5, 1.0, 2.0]:
-    ...     area = calculate_gaussian_area(amplitude_base * fator, sigma_base)
-    ...     print(f"Amplitude × {fator}: Área = {area:.0f} (fator {area/12533:.1f})")
-    >>> 
-    >>> # Variação do sigma
-    >>> for fator in [0.5, 1.0, 2.0]:
-    ...     area = calculate_gaussian_area(amplitude_base, sigma_base * fator)
-    ...     print(f"Sigma × {fator}: Área = {area:.0f} (fator {area/12533:.1f})")
-    
-    See Also
-    --------
-    single_gaussian : Função modelo Gaussiana
-    fit_gaussian_profiles : Ajuste de perfis Gaussianos que utiliza esta função
-    scipy.integrate.simpson : Integração numérica para validação
-    scipy.integrate.quad : Integração adaptativa de alta precisão
-    numpy.trapz : Integração trapezoidal simples
     
     References
     ----------
@@ -2787,27 +2540,6 @@ def detect_and_remove_outliers(results_df, verbose=True):
         ValueError: Se o DataFrame estiver vazio ou contiver apenas valores NaN.
         TypeError: Se results_df não for um pandas.DataFrame válido.
     
-    Examples:
-        >>> import pandas as pd
-        >>> # Exemplo básico com dados simulados
-        >>> data = {
-        ...     'Centro': [197, 214, 225, 1008, 1008],
-        ...     'FWHM_Gauss': [8.5, 12.3, 75.2, 9.1, 8.9],  # 75.2 é outlier
-        ...     'R2': [0.95, 0.88, 0.15, 0.92, 0.94],       # 0.15 é outlier
-        ...     'Pico': ['P1', 'P2', 'P3', 'P4', 'P5'],
-        ...     'Amostra': ['S1', 'S1', 'S1', 'S1', 'S1']
-        ... }
-        >>> df = pd.DataFrame(data)
-        >>> cleaned_df, report = detect_and_remove_outliers(df, verbose=True)
-        >>> print(f"Outliers removidos: {len(df) - len(cleaned_df)}")
-        Outliers removidos: 1
-        
-        >>> # Análise do relatório por região
-        >>> for region, stats in report.items():
-        ...     if stats['outliers_removed'] > 0:
-        ...         improvement = (stats['stats_before']['fwhm_cv'] - 
-        ...                       stats['stats_after']['fwhm_cv'])
-        ...         print(f"{region}: {improvement:.1f}% melhoria no CV")
     
     Notes:
         - A função preserva a ordem original dos dados não removidos
@@ -2817,13 +2549,7 @@ def detect_and_remove_outliers(results_df, verbose=True):
         - Critérios específicos para zircão podem precisar de ajuste para outros minerais
         - O processamento é determinístico: mesmos inputs produzem mesmos outputs
     
-    See Also:
-        get_zircon_spectral_regions : Define as regiões espectrais processadas
-        save_outlier_report : Salva relatório detalhado em arquivo
-        generate_summary_report : Integra limpeza no relatório principal
     
-    Version:
-        2.0.1 - Implementação multi-critério com validação estatística robusta
     """
     
     # Usar a nova definição centralizada de regiões espectrais
@@ -5210,51 +4936,7 @@ def analyze_peak_detection_robustness(results_df, config):
         "Modo externo 4": (350, 365)
     }
     
-    # Definir valores típicos de FWHM por região baseados na literatura científica
-    # Estes são usados para análise de contexto, não para remoção de dados
-    #
-    # Referências Bibliográficas com DOI Verificado:
-    #
-    # Para ν₃(SiO₄): 8-25 cm⁻¹ (modo mais sensível ao dano por radiação)
-    # - Zhang, M., et al. (2000). Annealing of alpha-decay damage in zircon: a Raman 
-    #   spectroscopic study. Journal of Physics: Condensed Matter, 12(13), 3131-3148.
-    #   https://doi.org/10.1088/0953-8984/12/13/321
-    #   (Documenta FWHM de ~5 cm⁻¹ cristalino até >20 cm⁻¹ metamíctico)
-    #
-    # - Nasdala, L., et al. (2001). Metamictisation of natural zircon: accumulation 
-    #   versus thermal annealing of radioactivity-induced damage. 
-    #   Contributions to Mineralogy and Petrology, 141(2), 125-144.
-    #   https://doi.org/10.1007/s004100000228
-    #   (Estabelece correlação FWHM vs. dose de radiação acumulada)
-    #
-    # - Ginster, U., et al. (2019). Annealing kinetics of radiation damage in zircon.
-    #   Geochimica et Cosmochimica Acta, 249, 225-246.
-    #   https://doi.org/10.1016/j.gca.2019.01.033
-    #   (Dados experimentais: FWHM 4.9-17.8 cm⁻¹ para diferentes doses de radiação)
-    #
-    # Para ν₁(SiO₄): 6-20 cm⁻¹ (modo de estiramento simétrico)
-    # - Dawson, P., et al. (1971). The vibrational spectrum of zircon (ZrSiO₄).
-    #   Journal of Physics C: Solid State Physics, 4(2), 240-256.
-    #   https://doi.org/10.1088/0022-3719/4/2/014
-    #   (Caracterização fundamental dos modos vibracionais do zircão)
-    #
-    # Para ν₂(SiO₄): 15-35 cm⁻¹ (modo de deformação angular, naturalmente mais largo)
-    # - Gucsik, A., et al. (2004). Infrared and Raman spectra of ZrSiO₄ 
-    #   experimentally shocked at high pressures. Mineralogical Magazine, 68(5), 801-811.
-    #   https://doi.org/10.1180/0026461046850220
-    #   (Dados de FWHM sob diferentes condições de pressão e dano estrutural)
-    #
-    # Para Modos Externos: 10-40 cm⁻¹ (maior variação natural)
-    # - Bjerga, A., et al. (2022). Radiation damage allows identification of truly 
-    #   inherited zircon. Communications Earth & Environment, 3, 37.
-    #   https://doi.org/10.1038/s43247-022-00372-2
-    #   (Análise de modos externos em zircões com diferentes histórias térmicas)
-    #
-    # - Härtel, B., et al. (2021). The closure temperature(s) of zircon Raman dating.
-    #   Geochronology, 3, 259-272.
-    #   https://doi.org/10.5194/gchron-3-259-2021
-    #   (Caracterização de modos externos e sua sensibilidade térmica)
-    #
+    
     typical_fwhm_ranges = {
         "ν₃(SiO₄)": (8, 25),      # Modo principal, sensível a dano por radiação
         "ν₁(SiO₄)": (6, 20),      # Modo secundário, também sensível
